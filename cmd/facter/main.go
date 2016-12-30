@@ -21,6 +21,7 @@ func main() {
 		"Emit facts as key:value pairs")
 	jsonFormat := flag.Bool("json", false,
 		"Emit facts as a JSON")
+	conf.KeyFilter = keyfilter.NewFilter()
 
 	flag.Parse()
 
@@ -36,10 +37,8 @@ func main() {
 		conf.Formatter = formatter.NewFormatter()
 	}
 
-	if len(queryArgs) > 0 {
-		conf.KeyFilter = keyfilter.NewFilter()
-		conf.KeyFilter.AddMany(queryArgs)
-	}
+	conf.KeyFilter.AddMany(queryArgs)
+
 	facter := facter.New(&conf)
 	_ = cpu.GetCPUFacts(facter)
 	_ = disk.GetDiskFacts(facter)

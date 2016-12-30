@@ -16,9 +16,10 @@ func NewKeyValueFormatter() *KeyValueFormatter {
 
 // Print prints-out facts in k:v format
 func (kvf KeyValueFormatter) Print(facts map[string]interface{}, keyfilters map[string]bool) error {
+	fmt.Println("Len is", len(keyfilters))
 	var keys []string
 	for k := range facts {
-		if keyfilters[k] {
+		if len(keyfilters) == 0 || keyfilters[k] {
 			keys = append(keys, k)
 		}
 	}

@@ -20,7 +20,6 @@ type Config struct {
 
 // Formatter interface
 type Formatter interface {
-	//Print(map[string]interface{}, interface{}) error
 	Print(map[string]interface{}, map[string]bool) error
 }
 

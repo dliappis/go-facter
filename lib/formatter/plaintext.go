@@ -18,7 +18,7 @@ func NewFormatter() *PlainTextFormatter {
 func (pf PlainTextFormatter) Print(facts map[string]interface{}, keyfilters map[string]bool) error {
 	var keys []string
 	for k := range facts {
-		if keyfilters[k] {
+		if len(keyfilters) == 0 || keyfilters[k] {
 			keys = append(keys, k)
 		}
 	}
