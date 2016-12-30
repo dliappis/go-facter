@@ -15,7 +15,7 @@ func NewJSONFormatter() *JSONFormatter {
 }
 
 // Print prints-out facts in JSON format
-func (jf *JSONFormatter) Print(facts map[string]interface{}) error {
+func (jf *JSONFormatter) Print(facts map[string]interface{}, keyfilters map[string]bool) error {
 	b, err := j.MarshalIndent(facts, "", "  ")
 	if err != nil {
 		return err

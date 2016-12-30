@@ -15,10 +15,12 @@ func NewKeyValueFormatter() *KeyValueFormatter {
 }
 
 // Print prints-out facts in k:v format
-func (kvf KeyValueFormatter) Print(facts map[string]interface{}) error {
+func (kvf KeyValueFormatter) Print(facts map[string]interface{}, keyfilters map[string]bool) error {
 	var keys []string
 	for k := range facts {
-		keys = append(keys, k)
+		if keyfilters[k] {
+			keys = append(keys, k)
+		}
 	}
 	sort.Strings(keys)
 	for _, k := range keys {

@@ -1,23 +1,34 @@
 package facter
 
 import (
-	"github.com/zstyblik/go-facter/lib/formatter"
+	"github.com/dliappis/go-facter/lib/formatter"
+	"github.com/dliappis/go-facter/lib/keyfilter"
 )
 
 // Facter struct holds Facter-related attributes
 type Facter struct {
 	facts     map[string]interface{}
 	formatter Formatter
+	keyfilter KeyFilter
 }
 
 // Config struct serves to pass Facter configuration
 type Config struct {
 	Formatter Formatter
+	KeyFilter KeyFilter
 }
 
 // Formatter interface
 type Formatter interface {
-	Print(map[string]interface{}) error
+	//Print(map[string]interface{}, interface{}) error
+	Print(map[string]interface{}, map[string]bool) error
+}
+
+// KeyFilter interface
+type KeyFilter interface {
+	Get() map[string]bool
+	AddOne(k string)
+	AddMany(k []string)
 }
 
 // New returns new instance of Facter
@@ -28,11 +39,13 @@ func New(userConf *Config) *Facter {
 	} else {
 		conf = &Config{
 			Formatter: formatter.NewFormatter(),
+			KeyFilter: keyfilter.NewFilter(),
 		}
 	}
 	f := &Facter{
 		facts:     make(map[string]interface{}),
 		formatter: conf.Formatter,
+		keyfilter: conf.KeyFilter,
 	}
 	return f
 }
@@ -55,5 +68,5 @@ func (f *Facter) Get(k string) (interface{}, bool) {
 
 // Print prints-out facts by calling formatter
 func (f *Facter) Print() {
-	f.formatter.Print(f.facts)
+	f.formatter.Print(f.facts, f.keyfilter.Get())
 }

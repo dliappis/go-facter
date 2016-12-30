@@ -15,14 +15,17 @@ func NewFormatter() *PlainTextFormatter {
 }
 
 // Print prints-out facts in k=>v format
-func (pf PlainTextFormatter) Print(facts map[string]interface{}) error {
+func (pf PlainTextFormatter) Print(facts map[string]interface{}, keyfilters map[string]bool) error {
 	var keys []string
 	for k := range facts {
-		keys = append(keys, k)
+		if keyfilters[k] {
+			keys = append(keys, k)
+		}
 	}
 	sort.Strings(keys)
 	for _, k := range keys {
 		fmt.Printf("%v => %v\n", k, facts[k])
 	}
+	fmt.Println(keyfilters)
 	return nil
 }

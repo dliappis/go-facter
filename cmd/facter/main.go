@@ -3,13 +3,14 @@ package main
 import (
 	"flag"
 
-	"github.com/zstyblik/go-facter/lib/cpu"
-	"github.com/zstyblik/go-facter/lib/disk"
-	"github.com/zstyblik/go-facter/lib/facter"
-	"github.com/zstyblik/go-facter/lib/formatter"
-	"github.com/zstyblik/go-facter/lib/host"
-	"github.com/zstyblik/go-facter/lib/mem"
-	"github.com/zstyblik/go-facter/lib/net"
+	"github.com/dliappis/go-facter/lib/cpu"
+	"github.com/dliappis/go-facter/lib/disk"
+	"github.com/dliappis/go-facter/lib/facter"
+	"github.com/dliappis/go-facter/lib/formatter"
+	"github.com/dliappis/go-facter/lib/host"
+	"github.com/dliappis/go-facter/lib/keyfilter"
+	"github.com/dliappis/go-facter/lib/mem"
+	"github.com/dliappis/go-facter/lib/net"
 )
 
 func main() {
@@ -20,7 +21,10 @@ func main() {
 		"Emit facts as key:value pairs")
 	jsonFormat := flag.Bool("json", false,
 		"Emit facts as a JSON")
+
 	flag.Parse()
+
+	queryArgs := flag.Args()
 
 	if *ptFormat == true {
 		conf.Formatter = formatter.NewFormatter()
@@ -32,6 +36,10 @@ func main() {
 		conf.Formatter = formatter.NewFormatter()
 	}
 
+	if len(queryArgs) > 0 {
+		conf.KeyFilter = keyfilter.NewFilter()
+		conf.KeyFilter.AddMany(queryArgs)
+	}
 	facter := facter.New(&conf)
 	_ = cpu.GetCPUFacts(facter)
 	_ = disk.GetDiskFacts(facter)

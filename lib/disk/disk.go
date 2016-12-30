@@ -7,8 +7,8 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/dliappis/go-facter/lib/common"
 	d "github.com/shirou/gopsutil/disk"
-	"github.com/zstyblik/go-facter/lib/common"
 )
 
 var (
