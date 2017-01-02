@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"os"
 
 	"github.com/dliappis/go-facter/lib/cpu"
 	"github.com/dliappis/go-facter/lib/disk"
@@ -22,9 +24,10 @@ func main() {
 	jsonFormat := flag.Bool("json", false,
 		"Emit facts as a JSON")
 	conf.KeyFilter = keyfilter.NewFilter()
-
+	flag.Usage = usage
 	flag.Parse()
 
+	// (Optional) non-flag args are parsed as queries/filters
 	queryArgs := flag.Args()
 
 	if *ptFormat == true {
@@ -46,4 +49,12 @@ func main() {
 	_ = mem.GetMemoryFacts(facter)
 	_ = net.GetNetFacts(facter)
 	facter.Print()
+}
+
+func usage() {
+	fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
+	flag.PrintDefaults()
+	fmt.Fprintf(os.Stderr, "  [query] [query] ... \n")
+	fmt.Fprintf(os.Stderr, "  \tOptional query strings to filter output with\n")
+	fmt.Fprintf(os.Stderr, "  \tExample query: facter kernel kernelversion\n")
 }

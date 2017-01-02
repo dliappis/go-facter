@@ -26,6 +26,5 @@ func (kf *KeyFilter) Get() map[string]bool {
 	for _, v := range kf.keys {
 		mykeys[v] = true
 	}
-	//value := kf.keys
 	return mykeys
 }

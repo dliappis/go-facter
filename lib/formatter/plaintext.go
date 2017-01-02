@@ -26,6 +26,5 @@ func (pf PlainTextFormatter) Print(facts map[string]interface{}, keyfilters map[
 	for _, k := range keys {
 		fmt.Printf("%v => %v\n", k, facts[k])
 	}
-	fmt.Println(keyfilters)
 	return nil
 }
