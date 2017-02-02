@@ -1,0 +1,149 @@
+.os.architecture
+.processors.models first
+.processors.count
+.processors.physicalcount
+.facterversion
+.networking.hostname
+.networking.ip
+.networking.ip6
+.kernel
+.kernelrelease
+.kernelversion
+.os.hardware
+.os.name
+.os.release :full
+.os.family
+.memory.system.total_bytes
+.timezone
+.system_uptime.days
+.system_uptime.seconds
+.system_uptime.uptime
+.is_virtual
+
+>>>> Replies on CentOS7 vm with 1GB ram
+
+.processors.models:
+[
+  "Intel Core Processor (Broadwell, no TSX)",
+  "Intel Core Processor (Broadwell, no TSX)"
+]
+
+.processors.count:
+2
+
+.processors.physicalcount:
+2
+
+.facterversion:
+3.5.0
+
+.networking.hostname:
+centos7qemu
+
+.networking.ip:
+192.168.121.112
+
+.networking.ip6:
+fe80::5054:ff:fe4d:4e7a
+
+.kernel:
+Linux
+
+.kernelrelease:
+3.10.0-327.36.3.el7.x86_64
+
+.kernelversion:
+3.10.0
+
+.os.architecture:
+x86_64
+
+.os.hardware:
+x86_64
+
+.os.name:
+CentOS
+
+.os.release:
+{
+  full => "7.2.1511",
+  major => "7",
+  minor => "2"
+}
+
+.os.family:
+RedHat
+
+.memory.system.total_bytes:
+1041035264
+
+.timezone:
+UTC
+
+.system_uptime.days:
+0
+
+.system_uptime.seconds:
+10154
+
+.system_uptime.uptime:
+2:49 hours
+
+.is_virtual:
+false
+
+
+>>>> Replies on Fedora24 with 1GB of ram
+
+.os.architecture
+x86_64
+.processors.models
+[
+  "Intel(R) Core(TM) i7-5820K CPU @ 3.30GHz",
+  "Intel(R) Core(TM) i7-5820K CPU @ 3.30GHz"
+]
+first
+
+.processors.count
+2
+.processors.physicalcount
+1
+.facterversion
+3.5.0
+.networking.hostname
+fedora24vbox
+.networking.ip
+10.0.2.15
+.networking.ip6
+fe80::a00:27ff:fe71:1ef5
+.kernel
+Linux
+.kernelrelease
+4.8.16-200.fc24.x86_64
+.kernelversion
+4.8.16
+.os.hardware
+x86_64
+.os.name
+Fedora
+.os.release
+{
+  full => "24",
+  major => "24"
+}
+:full
+
+.os.family
+RedHat
+.memory.system.total_bytes
+1040764928
+.timezone
+UTC
+.system_uptime.days
+5
+.system_uptime.seconds
+448009
+.system_uptime.uptime
+5 days
+.is_virtual
+true

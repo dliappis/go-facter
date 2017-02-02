@@ -117,6 +117,13 @@ func GetHostFacts(f Facter) error {
 		f.Add("architecture", guessArch(hardwareModel))
 	}
 
+	osrelease := make(map[string]map[string]interface{})
+	//osrelease := make(map[string]interface{})
+	osrelease["release"] = make(map[string]interface{})
+	kernelRelease := int8ToString(uname.Release)
+	osrelease["release"]["full"] = strings.Split(kernelRelease, "-")[0]
+
+	f.Add("os", osrelease)
 	z, _ := time.Now().Zone()
 	f.Add("timezone", z)
 
