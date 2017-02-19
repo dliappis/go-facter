@@ -17,12 +17,12 @@ import (
 
 func main() {
 	conf := facter.Config{}
-	ptFormat := flag.Bool("plaintext", false,
-		"Emit facts as key => value pairs")
-	kvFormat := flag.Bool("keyvalue", false,
-		"Emit facts as key:value pairs")
-	jsonFormat := flag.Bool("json", false,
-		"Emit facts as a JSON")
+	// ptFormat := flag.Bool("plaintext", false,
+	// 	"Emit facts as key => value pairs")
+	// kvFormat := flag.Bool("keyvalue", false,
+	// 	"Emit facts as key:value pairs")
+	// jsonFormat := flag.Bool("json", false,
+	// 	"Emit facts as a JSON")
 	conf.KeyFilter = keyfilter.NewFilter()
 	flag.Usage = usage
 	flag.Parse()
@@ -30,15 +30,17 @@ func main() {
 	// (Optional) non-flag args are parsed as queries/filters
 	queryArgs := flag.Args()
 
-	if *ptFormat == true {
-		conf.Formatter = formatter.NewFormatter()
-	} else if *kvFormat == true {
-		conf.Formatter = formatter.NewKeyValueFormatter()
-	} else if *jsonFormat == true {
-		conf.Formatter = formatter.NewJSONFormatter()
-	} else {
-		conf.Formatter = formatter.NewFormatter()
-	}
+	// if *ptFormat == true {
+	// 	conf.Formatter = formatter.NewFormatter()
+	// } else if *kvFormat == true {
+	// 	conf.Formatter = formatter.NewKeyValueFormatter()
+	// } else if *jsonFormat == true {
+	// 	conf.Formatter = formatter.NewJSONFormatter()
+	// } else {
+	// 	conf.Formatter = formatter.NewFormatter()
+	// }
+
+	conf.Formatter = formatter.NewFormatter()
 
 	conf.KeyFilter.AddMany(queryArgs)
 
@@ -48,6 +50,7 @@ func main() {
 	_ = host.GetHostFacts(facter)
 	_ = mem.GetMemoryFacts(facter)
 	_ = net.GetNetFacts(facter)
+	fmt.Printf("%+v\n", conf.KeyFilter)
 	facter.Print()
 }
 

@@ -20,12 +20,13 @@ type Config struct {
 
 // Formatter interface
 type Formatter interface {
-	Print(map[string]interface{}, map[string]bool) error
+	Print(map[string]interface{}, [][]string, int) error
 }
 
 // KeyFilter interface
 type KeyFilter interface {
-	Get() map[string]bool
+	// Get() map[string]bool
+	Get() [][]string
 	AddOne(k string)
 	AddMany(k []string)
 }
@@ -67,5 +68,5 @@ func (f *Facter) Get(k string) (interface{}, bool) {
 
 // Print prints-out facts by calling formatter
 func (f *Facter) Print() {
-	f.formatter.Print(f.facts, f.keyfilter.Get())
+	f.formatter.Print(f.facts, f.keyfilter.Get(), 0)
 }
