@@ -8,6 +8,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/hashicorp/go-version"
 	h "github.com/shirou/gopsutil/host"
 )
 
@@ -120,9 +121,14 @@ func GetHostFacts(f Facter) error {
 	//osrelease := make(map[string]map[string]interface{})
 	osrelease := make(map[string]interface{})
 	osrelease["release"] = make(map[string]interface{})
+
 	kernelRelease := int8ToString(uname.Release)
+	kver, err := version.NewVersion(strings.Split(kernelRelease, "-")[0])
+
 	//osrelease["release"].(map[string]interface{})["full"] = strings.Split(kernelRelease, "-")[0]
 	osrelease["release"].(map[string]interface{})["full"] = strings.Split(kernelRelease, "-")[0]
+	osrelease["release"].(map[string]interface{})["major"] = fmt.Sprintf("%v", kver.Segments()[0])
+	osrelease["release"].(map[string]interface{})["minor"] = fmt.Sprintf("%v", kver.Segments()[1])
 	f.Add("os", osrelease)
 	z, _ := time.Now().Zone()
 	f.Add("timezone", z)
