@@ -40,7 +40,7 @@ func main() {
 	// 	conf.Formatter = formatter.NewFormatter()
 	// }
 
-	conf.Formatter = formatter.NewFormatter()
+	conf.Formatter = formatter.NewFormatter() // plaintext formatter
 
 	conf.KeyFilter.AddMany(queryArgs)
 

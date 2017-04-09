@@ -1,8 +1,9 @@
 package formatter
 
 import (
+	"encoding/json"
 	"fmt"
-	"sort"
+	"os"
 )
 
 // PlainTextFormatter prints-out facts in k=>v format
@@ -16,60 +17,58 @@ func NewFormatter() *PlainTextFormatter {
 
 // Print prints-out facts in k=>v format
 func (pf PlainTextFormatter) Print(facts map[string]interface{}, keyfilters [][]string, level int) error {
-	ThePrinter(facts, keyfilters, level)
-	// var keys []string
+	if len(keyfilters) > 0 {
+		PrintFilteredFacts(keyfilters, facts)
+	} else {
+		b, err := json.MarshalIndent(facts, "", "  ")
+		if err == nil {
+			os.Stdout.Write(b)
+			fmt.Println("")
+		}
+	}
 
-	// for k := range facts {
-	// 	if len(keyfilters) == 0 || keyfilters[k] {
-	// 		keys = append(keys, k)
-	// 	}
-	// }
-	// sort.Strings(keys)
-	// for _, k := range keys {
-	// 	fmt.Printf("%v => %v\n", k, facts[k])
-	// }
 	return nil
 }
 
-func ThePrinter(facts map[string]interface{}, keyfilters [][]string, level int) {
-	var keys []string
-	for k := range facts {
-		// User didn't provide filters. Present all facts.
-		if len(keyfilters) == 0 {
-			keys = append(keys, k)
-			break
+// loop through all our filters and print matching sections of facts
+func PrintFilteredFacts(keyfilters [][]string, facts map[string]interface{}) {
+	for _, kfv := range keyfilters {
+		res := FilterFacts(kfv, facts)
+		switch restype := res.(type) {
+		case string:
+			fmt.Println(restype)
+		case map[string]interface{}:
+			bjson, err := json.MarshalIndent(restype, "", "  ")
+			if err == nil {
+				os.Stdout.Write(bjson)
+				fmt.Println("")
+			}
 		}
+	}
+}
 
-		for _, keyslice := range keyfilters {
-			//fmt.Printf("We are at level %d and keyslice is %+v\n", level, keyslice)
-			if level < len(keyslice) {
-				keyflt := keyslice[level]
-				if len(keyslice) == 0 || keyflt == k {
-					//fmt.Printf("Good news! Just added %+v\n", k)
-					keys = append(keys, k)
-					break
+/* try to match a filter string (e.g. os.release) in our nested map facts
+   and return leaf fact element
+*/
+func FilterFacts(keyfilter []string, facts map[string]interface{}) interface{} {
+	myfacts := facts
+
+	for level, filterkey := range keyfilter {
+		for factkey, factvalue := range myfacts {
+			if filterkey == factkey && level == len(keyfilter)-1 {
+				// we've matched the whole filter string. Return the rest of the fact structure as it.
+				switch factvalue.(type) {
+				case map[string]interface{}:
+					return factvalue.(map[string]interface{})
+				case string:
+					return factvalue.(string)
 				}
-			} else if level >= len(keyslice) {
-				// No more filters for facts of this depth, append all
-				keys = append(keys, k)
+			} else if filterkey == factkey && level < len(keyfilter)-1 {
+				// matched one part of our filter, go deeper in our facts
+				myfacts = myfacts[factkey].(map[string]interface{})
 				break
 			}
 		}
 	}
-	sort.Strings(keys)
-	for _, k := range keys {
-		// if _, ok := facts[k].(map[string]interface{}); ok {
-		// 	fmt.Printf("Hm there's a map here!")
-		// 	ThePrinter(facts[k].(map[string]interface{}), keyfilters)
-		// } else {
-		// 	fmt.Printf("%v => %v\n", k, facts[k])
-		// }
-		switch facts[k].(type) {
-		case map[string]interface{}:
-			fmt.Printf("%v => ", k)
-			ThePrinter(facts[k].(map[string]interface{}), keyfilters, level+1)
-		default:
-			fmt.Printf("%v => %v\n", k, facts[k])
-		}
-	}
+	return nil // nothing matched ...
 }
