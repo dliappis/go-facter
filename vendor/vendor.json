@@ -21,6 +21,10 @@
 			"revisionTime": "2016-03-11T03:06:26Z"
 		},
 		{
+			"path": "github.com/hashicorp/go-version/context",
+			"revision": ""
+		},
+		{
 			"checksumSHA1": "JdJMxGd98XMiRfT3A2BGaQeuaDs=",
 			"path": "github.com/shirou/gopsutil",
 			"revision": "22a03b5be3f384f558742929065778aa26471033",
